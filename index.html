@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>css3</title>
+<style>
+	*{margin:0; padding:0;}
+	body{background:#000;}
+	img.gb{
+			position:fixed;
+			left:44%;
+			top:0;
+			-webkit-animation:bd 5s ease-in-out infinite;/*bd摆动*/
+	}
+	@-webkit-keyframes bd{
+		0%{-webkit-transform:rotate(30deg);-webkit-transform-origin:top center;}
+		50%{-webkit-transform:rotate(-30deg);-webkit-transform-origin:top center;}
+		100%{-webkit-transform:rotate(30deg);-webkit-transform-origin:top center;}      /*中心点旋转*/
+	}
+	.grav{
+		width:100%;
+		height:100%;
+		background:rgba(0,0,0,0.5);
+		position:fixed;
+		left:0;
+		top:0;	
+		display:none;	
+	}
+	.Con{
+		width:560px;
+		height:30px;
+		position:fixed;
+		left:28%;
+		bottom:30px;
+	}
+	.Con span.col{
+		width:80px; height:30px;
+		background:#f3f3f3;
+		display:block;	
+		font-size:12px;
+		line-height:30px;
+		text-indent:10px;
+		border-radius:5px 0px 0px 5px;
+		cursor:pointer;
+		float:left;
+		
+	}
+	.Con span.col font{
+		width:10px;
+		height:10px;
+		background:rgb(255,0,51);
+		display:block;
+		position:absolute;
+		left:50px;top:10px;	
+		border:1px solid #000;	
+	}
+	.Con p.txt{
+		width:400px;
+		height:30px;
+		background:#fff;
+		display:block;
+		float:left;	
+		line-height:30px;	
+	}
+	.Con span.but{
+		width:80px; height:30px;
+		background:#f4354b;
+		display:block;
+		float:left;
+		font-size:12px;
+		color:#fff;
+		text-align:center;
+		line-height:30px;
+		border-radius:0 5px 5px 0;
+		cursor:pointer;
+	}
+	.Con ul{
+		width:80px;
+		position:absolute;
+		left:0;
+		bottom:25px;
+		display:none;
+	}
+	.Con ul li{
+		background:#f3f3f3;
+		list-style:none;
+		height:30px;
+		font-size:12px;
+		line-height:30px;
+		text-indent:10px;
+		cursor:pointer;	
+		position:relative;
+	}
+	.Con ul li font{
+		width:10px;height:10px;
+		display:block;
+		border:1px solid #000;
+		position:absolute;
+		left:50px;
+		top:10px;
+	}
+	.Text{
+		width:600px;
+		height:500px;
+		margin:150px auto;
+		color:red;
+		font-size:20px;
+		line-height:40px;
+		text-align:center;
+	}
+</style>
+</head>
+
+<body>
+	<img src="images/xx.png" class="gb"/>
+    <!--灰色的遮罩层-->
+    <div class="grav">
+    	<!--内容发表区-->
+        <div class="Con">
+        	<span class="col">颜色<font></font></span>
+            <p class="txt" contenteditable="true"></p>
+            <!--contenteditable可以输入内容-->
+            <span class="but">清空再写</span>
+        	<ul>
+                <li data-color="#003366">颜色<font style="background-color:#003366;"></font></li>
+                <li data-color="red" class="xz">颜色<font style="background-color:red;"></font></li>
+                <li data-color="#33cc66">颜色<font style="background-color:#33cc66;"></font></li>
+                <li data-color="#ff0033">颜色<font style="background-color:#ff0033;"></font></li>
+                <li data-color="#00ff33">颜色<font style="background-color:#00ff33;"></font></li>
+                <li data-color="#9966ff">颜色<font style="background-color:#9966ff;"></font></li>
+        	</ul>
+        </div>
+        <div class="Text">很喜欢拥抱，喜欢与心爱的人深情相拥的感觉，什么也不说，什么也不做，就只是静静地拥抱，久久不要分开，似乎只有这样，才能体会与心爱的人荣威一体的感觉。在那一刻，相信时间会为我们停止。拥抱，是无声的语言，拥抱，是彼此身心需要。亲爱的，好像累的时候你能抱着我。</div>
+    </div>
+    <audio src="1.mp3" controls id="Music"></audio>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script>
+		$('img.gb').click(function(){
+			$('.grav').show();//遮罩层显示
+			$('#Music').get(0).play();//音乐播放	
+		});
+		//点击颜色时，显示颜色的ul或者隐藏
+		$('.Con span.col').click(function(){
+			$('.Con ul').toggle("slow");//慢慢显示	;			
+		});
+		//点击颜色时，更换颜色
+		$('.Con ul li').click(function(){
+			var col=$(this).data("color");
+			//alert(col);
+			$(".Con span.col font").css("background-color",col);
+			$(this).addClass("xz").siblings().removeClass("xz");
+			$(".Con ul").toggle("slow");	
+		});
+		
+		var arr=[];
+		$(".Con p.txt").keyup(function(e){
+			//获取输入框的颜色
+			var col=$(".Con ul li.xz").data("color");	
+			//获取输入框的内容
+			var txt="<span style='color:"+col+"'>"+$(this).text()+"</span>"
+			$(".Text").html(arr.join("").toString()+txt);
+			if(e.keyCode==13){
+				//清空输入的内容
+				$(this).empty();
+				arr.push("<p>"+txt+"</p>");
+				var html="";
+				for(var i=0; i<arr.length; i++){
+					html+=arr[i];
+				}
+				$(".Text").html(html);
+			}
+		});
+		$('.but').click(function(){
+				$('.txt').empty();				
+		});
+		
+	</script>
+</body>
+</html>
